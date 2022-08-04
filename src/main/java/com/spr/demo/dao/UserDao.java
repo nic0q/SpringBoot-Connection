@@ -14,5 +14,5 @@ public interface UserDao {
   String create_user(User user);
   User edit_user(int id);
   String delete_user(int id);
-  public boolean verify_credentials(User user);
+  User verify_credentials(User user);
 }

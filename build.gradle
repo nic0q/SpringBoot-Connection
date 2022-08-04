@@ -23,7 +23,7 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok:1.18.24'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 	implementation group: 'de.mkammerer', name: 'argon2-jvm', version: '2.1'
-
+	implementation('io.jsonwebtoken:jjwt:0.2')
 }
 
 tasks.named('test') {

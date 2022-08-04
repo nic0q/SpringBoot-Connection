@@ -53,14 +53,18 @@ public class UserDaoImp implements UserDao{
     return "El usuario ha sido eliminado"; // se retorna el mensaje de exito
   }
   @Override
-  public boolean verify_credentials(User user) {
+  public User verify_credentials(User user) {
     String query = "FROM User WHERE user_name = :user_name"; // anti inyeccion sql
-    List <User> some_user =  entityManager.createQuery(query,User.class).setParameter("user_name",user.getUser_name()).getResultList(); // se crea la consulta y se obtiene el resultado
-    if(some_user.isEmpty()){
-      return false;
+    User some_user =  entityManager.createQuery(query,User.class).setParameter("user_name",user.getUser_name()).getResultList().get(0); // se crea la consulta y se obtiene el resultado
+    if(some_user == null){
+      return null;
     }
-    String hashed_password = some_user.get(0).getPassword(); // se obtiene la contraseña encriptada del usuario
+    String hashed_password = some_user.getPassword(); // se obtiene la contraseña encriptada del usuario
     Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2i); // se crea el objeto Argon2
-    return argon2.verify(hashed_password, user.getPassword()); // se verifica la contraseña encriptada con la contraseña ingresada por el usuario
+    if(argon2.verify(hashed_password, user.getPassword())){ // se verifica la contraseña encriptada con la contraseña ingresada por el usuario
+      
+      return some_user; // se retorna el usuario
+    }
+    return null;
   }
 }
