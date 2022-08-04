@@ -9,5 +9,10 @@ import java.util.List;
 // en este caso sera al clase UserDaoImp
 
 public interface UserDao {
-  List<User> getUsers();
+  List<User> get_users();
+  User get_user(int id);
+  String create_user(User user);
+  User edit_user(int id);
+  String delete_user(int id);
+  public boolean verify_credentials(User user);
 }
