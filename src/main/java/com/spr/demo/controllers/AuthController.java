@@ -19,10 +19,10 @@ public class AuthController {
 
   @PostMapping("api/login") 
   public String get_credentials(@RequestBody User user){
-    if( userDao.verify_credentials(user) == null){
+    if(userDao.verify_credentials(user) != null){
       String token = jwtutil.create(String.valueOf(user.getId()), user.getEmail());
       return token;
     }
-    return null;
+    return "Usuario Invalido";
   }
 }

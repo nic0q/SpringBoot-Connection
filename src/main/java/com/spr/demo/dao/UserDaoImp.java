@@ -39,8 +39,12 @@ public class UserDaoImp implements UserDao{
     return "Usuario creado"; // se retorna un mensaje de exito
   }
   @Override
-  public User edit_user(int id) {
-    // TODO Auto-generated method stub
+  public User edit_user(User new_user_data) {
+    User user = entityManager.find(User.class,new_user_data.getId()); // se obtiene el usuario con el id especificado
+    user.setName(new_user_data.getName()); // se actualiza el nombre del usuario
+    user.setEmail(new_user_data.getEmail());  // se actualiza el email del usuario
+    user.setPassword(new_user_data.getPassword()); // se actualiza la contraseña del usuario
+    entityManager.merge(user); // se actualiza el usuario en la base de datos
     return null;
   }  
   @Override  
@@ -55,16 +59,17 @@ public class UserDaoImp implements UserDao{
   @Override
   public User verify_credentials(User user) {
     String query = "FROM User WHERE user_name = :user_name"; // anti inyeccion sql
-    User some_user =  entityManager.createQuery(query,User.class).setParameter("user_name",user.getUser_name()).getResultList().get(0); // se crea la consulta y se obtiene el resultado
-    if(some_user == null){
+    List <User> user_list =  entityManager.createQuery(query,User.class).setParameter("user_name",user.getUser_name()).getResultList(); // se crea la consulta y se obtiene el resultado
+    if(user_list.isEmpty()){ // si no existe el usuario
       return null;
     }
+    User some_user = user_list.get(0); // se obtiene el usuario
     String hashed_password = some_user.getPassword(); // se obtiene la contraseña encriptada del usuario
     Argon2 argon2 = Argon2Factory.create(Argon2Factory.Argon2Types.ARGON2i); // se crea el objeto Argon2
     if(argon2.verify(hashed_password, user.getPassword())){ // se verifica la contraseña encriptada con la contraseña ingresada por el usuario
-      
-      return some_user; // se retorna el usuario
+      return user; // se retorna el usuario
     }
+    
     return null;
   }
 }

@@ -12,7 +12,7 @@ public interface UserDao {
   List<User> get_users();
   User get_user(int id);
   String create_user(User user);
-  User edit_user(int id);
+  User edit_user(User user);
   String delete_user(int id);
   User verify_credentials(User user);
 }

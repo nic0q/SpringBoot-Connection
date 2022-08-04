@@ -31,11 +31,12 @@ public class UserController {
     return userDao.create_user(user);
   }
   @PutMapping("api/edit_user/{id}")
-  public User edit_User(@PathVariable int id){
-    return userDao.edit_user(id); 
+  public User edit_User(@RequestBody User user){
+    return userDao.edit_user(user); 
   }
   @DeleteMapping("api/delete_user/{id}")
   public String delete_user(@PathVariable int id){
     return userDao.delete_user(id); 
   }
 }
+
